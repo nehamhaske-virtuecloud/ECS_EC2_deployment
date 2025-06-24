@@ -5,7 +5,7 @@ resource "aws_autoscaling_group" "ecs_asg" {
   min_size             = var.min_size
 
  vpc_zone_identifier = [for s in aws_subnet.public : s.id]
-
+ 
   launch_template {
     id      = aws_launch_template.ecs_lt.id
     version = "$Latest"
