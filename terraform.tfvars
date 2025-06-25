@@ -1,5 +1,5 @@
 region               = "ap-south-1"
-project_name         = "ecs-ec2-app"
+project_name         = "app-ecs-ec2"
 vpc_cidr_block       = "10.0.0.0/16"
 
 # Subnets
