@@ -2,6 +2,7 @@ resource "aws_launch_template" "web_lt" {
   name_prefix   = "${var.project_name}-web-lt"
   image_id      = data.aws_ami.ecs_ami.id
   instance_type = var.instance_type
+  key_name      = var.key_name
   user_data     = base64encode(file("ecs-userdata.sh"))
 
   iam_instance_profile {
