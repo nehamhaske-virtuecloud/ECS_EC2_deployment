@@ -110,7 +110,7 @@ resource "aws_ecs_service" "web" {
 
   depends_on = [
     aws_autoscaling_group.web_asg,
-    aws_lb_listener.ecs_listener
+    aws_lb_listener.ecs_web_listener
   ]
 
   tags = {
