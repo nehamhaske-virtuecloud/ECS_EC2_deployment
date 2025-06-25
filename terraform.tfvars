@@ -12,6 +12,7 @@ availability_zones        = ["ap-south-1a", "ap-south-1b"]
 
 # EC2 Instance Type
 instance_type             = "t2.micro"
+key_name             = "my-key-pair"
 
 # Web Tier ASG Capacity
 web_desired_capacity      = 1
