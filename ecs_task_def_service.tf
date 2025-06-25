@@ -25,18 +25,25 @@ resource "aws_ecs_service" "app" {
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.app.arn
   desired_count   = 1
-  launch_type     = "EC2"
+  launch_type     = "EC2" # Optional
+
+  capacity_provider_strategy {
+    capacity_provider = aws_ecs_capacity_provider.app_cp.name
+    base              = 1
+    weight            = 100
+  }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.ecs_tg.arn
+    target_group_arn = aws_lb_target_group.app_tg.arn
     container_name   = "app-container"
     container_port   = 8080
   }
 
   depends_on = [
-    aws_autoscaling_group.ecs_asg
+    aws_autoscaling_group.app_asg
   ]
 }
+
 
 
 resource "aws_ecs_task_definition" "web" {
@@ -66,15 +73,22 @@ resource "aws_ecs_service" "web" {
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.web.arn
   desired_count   = 1
-  launch_type     = "EC2"
+  launch_type     = "EC2" # Optional if you're using capacity_provider_strategy
+
+  capacity_provider_strategy {
+    capacity_provider = aws_ecs_capacity_provider.web_cp.name
+    base              = 1
+    weight            = 100
+  }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.ecs_tg.arn
+    target_group_arn = aws_lb_target_group.web_tg.arn
     container_name   = "web-container"
     container_port   = 80
   }
 
   depends_on = [
-    aws_lb_listener.ecs_listener,
+    aws_lb_listener.ecs_listener
   ]
 }
+
