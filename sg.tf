@@ -36,6 +36,14 @@ resource "aws_security_group" "ec2_sg" {
     security_groups = [aws_security_group.alb_sg.id]
   }
 
+ingress {
+    description     = "Allow HTTP from ALB"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "ssh"
+    security_groups = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
