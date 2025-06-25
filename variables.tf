@@ -1,3 +1,6 @@
+#######################
+# General Config
+#######################
 variable "region" {
   description = "AWS region"
   type        = string
@@ -8,6 +11,9 @@ variable "project_name" {
   type        = string
 }
 
+#######################
+# Networking
+#######################
 variable "vpc_cidr_block" {
   description = "CIDR block for the main VPC"
   type        = string
@@ -33,65 +39,90 @@ variable "availability_zones" {
   type        = list(string)
 }
 
-######################
-# Instance Type
-######################
+#######################
+# EC2 Launch Config
+#######################
 variable "instance_type" {
+  description = "EC2 instance type for ECS container instances"
+  type        = string
   default     = "t2.micro"
-  description = "EC2 instance type"
 }
 
-######################
-# Web ASG Capacity
-######################
+#######################
+# Auto Scaling - Web Tier
+#######################
 variable "web_desired_capacity" {
+  description = "Desired number of instances in Web Auto Scaling Group"
+  type        = number
   default     = 1
-  description = "Desired capacity for Web ASG"
-}
-
-variable "web_max_size" {
-  default     = 2
-  description = "Max size for Web ASG"
 }
 
 variable "web_min_size" {
+  description = "Minimum number of instances in Web Auto Scaling Group"
+  type        = number
   default     = 1
-  description = "Min size for Web ASG"
 }
 
-######################
-# App ASG Capacity
-######################
-variable "app_desired_capacity" {
-  default     = 1
-  description = "Desired capacity for App ASG"
-}
-
-variable "app_max_size" {
+variable "web_max_size" {
+  description = "Maximum number of instances in Web Auto Scaling Group"
+  type        = number
   default     = 2
-  description = "Max size for App ASG"
+}
+
+#######################
+# Auto Scaling - App Tier
+#######################
+variable "app_desired_capacity" {
+  description = "Desired number of instances in App Auto Scaling Group"
+  type        = number
+  default     = 1
 }
 
 variable "app_min_size" {
+  description = "Minimum number of instances in App Auto Scaling Group"
+  type        = number
   default     = 1
-  description = "Min size for App ASG"
 }
 
-######################
-# RDS
-######################
+variable "app_max_size" {
+  description = "Maximum number of instances in App Auto Scaling Group"
+  type        = number
+  default     = 2
+}
+
+#######################
+# RDS Configuration
+#######################
 variable "db_name" {
+  description = "RDS database name"
+  type        = string
   default     = "appdb"
-  description = "The name of the RDS database"
 }
 
 variable "db_username" {
+  description = "RDS master username"
+  type        = string
   default     = "admin"
-  description = "Master username for the RDS"
 }
 
 variable "db_password" {
-  description = "Master password for the RDS"
+  description = "RDS master password"
   type        = string
   sensitive   = true
 }
+
+#######################
+# Capacity Provider Strategy
+#######################
+variable "web_capacity_provider_name" {
+  description = "Capacity Provider name for Web ECS Service"
+  type        = string
+  default     = "web-cp"
+}
+
+variable "app_capacity_provider_name" {
+  description = "Capacity Provider name for App ECS Service"
+  type        = string
+  default     = "app-cp"
+}
+
