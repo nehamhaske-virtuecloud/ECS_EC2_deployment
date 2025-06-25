@@ -1,3 +1,6 @@
+##########################
+# ECS Task Definition: APP
+##########################
 resource "aws_ecs_task_definition" "app" {
   family                   = "app-task"
   network_mode             = "bridge"
@@ -18,14 +21,20 @@ resource "aws_ecs_task_definition" "app" {
       ]
     }
   ])
+
+  tags = {
+    Name = "app-task-def"
+  }
 }
 
+##########################
+# ECS Service: APP
+##########################
 resource "aws_ecs_service" "app" {
   name            = "app-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.app.arn
   desired_count   = 1
-  launch_type     = "EC2" # Optional
 
   capacity_provider_strategy {
     capacity_provider = aws_ecs_capacity_provider.app_cp.name
@@ -40,12 +49,18 @@ resource "aws_ecs_service" "app" {
   }
 
   depends_on = [
-    aws_autoscaling_group.app_asg
+    aws_autoscaling_group.app_asg,
+    aws_lb_target_group.app_tg
   ]
+
+  tags = {
+    Name = "app-service"
+  }
 }
 
-
-
+##########################
+# ECS Task Definition: WEB
+##########################
 resource "aws_ecs_task_definition" "web" {
   family                   = "web-task"
   network_mode             = "bridge"
@@ -66,14 +81,20 @@ resource "aws_ecs_task_definition" "web" {
       ]
     }
   ])
+
+  tags = {
+    Name = "web-task-def"
+  }
 }
 
+##########################
+# ECS Service: WEB
+##########################
 resource "aws_ecs_service" "web" {
   name            = "web-service"
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.web.arn
   desired_count   = 1
-  launch_type     = "EC2" # Optional if you're using capacity_provider_strategy
 
   capacity_provider_strategy {
     capacity_provider = aws_ecs_capacity_provider.web_cp.name
@@ -88,7 +109,11 @@ resource "aws_ecs_service" "web" {
   }
 
   depends_on = [
+    aws_autoscaling_group.web_asg,
     aws_lb_listener.ecs_listener
   ]
-}
 
+  tags = {
+    Name = "web-service"
+  }
+}
