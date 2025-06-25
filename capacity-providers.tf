@@ -1,6 +1,6 @@
 # Web Capacity Provider
 resource "aws_ecs_capacity_provider" "web_cp" {
-  name = "${var.project_name}-web-cp"
+  name = "${var.project_name}-web-cp-custom"
 
   auto_scaling_group_provider {
     auto_scaling_group_arn = aws_autoscaling_group.web_asg.arn
@@ -22,7 +22,7 @@ resource "aws_ecs_capacity_provider" "web_cp" {
 
 # App Capacity Provider
 resource "aws_ecs_capacity_provider" "app_cp" {
-  name = "${var.project_name}-app-cp"
+  name = "${var.project_name}-app-cp-custom"
 
   auto_scaling_group_provider {
     auto_scaling_group_arn = aws_autoscaling_group.app_asg.arn
